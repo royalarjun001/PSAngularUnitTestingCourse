@@ -28,4 +28,13 @@ describe('HeroComponent', () => {
     fixture.componentInstance.hero = {id: 1, name: 'super dude', strength: 3};
     expect(fixture.componentInstance.hero.name).toEqual('super dude');
   });
+
+  it('should render hero name in an anchor tag', () => {
+    // manually set a hero for the component.
+    fixture.componentInstance.hero = {id: 1, name: 'super dude', strength: 3};
+    fixture.detectChanges();
+    // native element here hold the DOM structure
+    // for the component.
+    expect(fixture.nativeElement.querySelector('a').textContent).toContain('super dude');
+  });
 });
