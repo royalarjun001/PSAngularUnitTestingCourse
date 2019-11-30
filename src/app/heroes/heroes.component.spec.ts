@@ -8,7 +8,7 @@ describe('HeroesComponent', () => {
 
   beforeEach(() => {
     HEROES = [
-      { id: 1, name: 'SiperDude', strength: 8},
+      { id: 1, name: 'SuperDude', strength: 8},
       { id: 2, name: 'Wonder woman', strength: 24},
       { id: 3, name: 'Super Dude', strength: 55},
     ];
