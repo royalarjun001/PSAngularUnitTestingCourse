@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeroesComponent } from './heroes.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Component, Input } from '@angular/core';
 import { HeroService } from '../hero.service';
 import { of } from 'rxjs';
 
@@ -8,6 +8,15 @@ describe('HerosComponent (shallow test)', () => {
   let fixture: ComponentFixture<HeroesComponent>;
   let mockHeroService;
   let HEROES;
+
+  // creating a mock child component
+  @Component({
+    selector: 'app-hero',
+    template: '<div></div>'
+  })
+  class FakeHeroComponent {
+    @Input() hero: any;
+  }
 
   beforeEach(() => {
     HEROES = [
@@ -18,11 +27,13 @@ describe('HerosComponent (shallow test)', () => {
 
     mockHeroService = jasmine.createSpyObj(['getHeroes', 'addHeros', 'deleteHeroes']);
     TestBed.configureTestingModule({
-      declarations: [HeroesComponent],
+      declarations: [
+        HeroesComponent,
+        FakeHeroComponent
+      ],
       providers: [
         { provide: HeroService, useValue: mockHeroService }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+      ]
     });
 
     fixture = TestBed.createComponent(HeroesComponent);
