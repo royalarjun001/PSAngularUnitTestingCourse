@@ -5,20 +5,12 @@ import { HeroService } from '../hero.service';
 // tslint:disable-next-line: import-blacklist
 import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
+import { HeroComponent } from '../hero/hero.component';
 
-describe('HerosComponent (shallow test)', () => {
+describe('HerosComponent (Deep test)', () => {
   let fixture: ComponentFixture<HeroesComponent>;
   let mockHeroService;
   let HEROES;
-
-  // creating a mock child component
-  @Component({
-    selector: 'app-hero',
-    template: '<div></div>'
-  })
-  class FakeHeroComponent {
-    @Input() hero: any;
-  }
 
   beforeEach(() => {
     HEROES = [
@@ -31,29 +23,35 @@ describe('HerosComponent (shallow test)', () => {
     TestBed.configureTestingModule({
       declarations: [
         HeroesComponent,
-        FakeHeroComponent
+        HeroComponent
       ],
       providers: [
         { provide: HeroService, useValue: mockHeroService }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     });
 
     fixture = TestBed.createComponent(HeroesComponent);
   });
 
-  it('should set the heros correctly from service', () => {
-    // mocking get heros service calls
-    mockHeroService.getHeroes.and.returnValue(of(HEROES));
-    fixture.detectChanges(); // this will call ng-on-init
+  it('should render each hero as HeroComponent', () => {
+    mockHeroService.getHeroes.and.returnValues(of(HEROES));
 
-    expect(fixture.componentInstance.heroes.length).toBe(HEROES.length);
+    // runs ngOnInit
+    fixture.detectChanges();
+
+    const heroComponentDebugElement = fixture.debugElement.queryAll(By.directive(HeroComponent));
+    expect(heroComponentDebugElement.length).toBe(3);
   });
 
-  it('should create a li for each heros', () => {
-    // mocking get heros service calls
-    mockHeroService.getHeroes.and.returnValue(of(HEROES));
-    fixture.detectChanges(); // this will call ng-on-init
+  it('should render correct hero as HeroComponent', () => {
+    mockHeroService.getHeroes.and.returnValues(of(HEROES));
 
-    expect(fixture.debugElement.queryAll(By.css('li')).length).toBe(HEROES.length);
+    // runs ngOnInit
+    fixture.detectChanges();
+
+    const heroComponentDebugElement = fixture.debugElement.queryAll(By.directive(HeroComponent));
+    const heroName = heroComponentDebugElement[0].componentInstance.hero.name;
+    expect(heroName).toEqual('SuperDude');
   });
 });
