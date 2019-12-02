@@ -67,4 +67,18 @@ describe('HerosComponent (Deep test)', () => {
     heroComponents[0].query(By.css('button')).triggerEventHandler('click', { stopPropagation: () => {}});
       expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
     });
+
+    it(`should call the heroService.deleteHero when the
+    Hero component's delete event is invoked`, () => {
+      // keep eye on the delete method of the component.
+      spyOn(fixture.componentInstance, 'delete');
+      mockHeroService.getHeroes.and.returnValues(of(HEROES));
+
+    fixture.detectChanges();
+
+    const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+    (<HeroComponent>heroComponents[0].componentInstance).delete.emit(undefined);
+
+      expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
+    });
 });
